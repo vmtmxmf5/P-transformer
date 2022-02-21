@@ -49,9 +49,10 @@ class Ptransformer(nn.Module):
         self.p_tf.update_dropout(dropout)
         
     def search(self, src, lengths, max_length=120, bos_id=2, eos_id=3):
+        B = src.size()[0]
         y_hats, indices = [], []
         with torch.no_grad():
-            dec_input = torch.LongTensor([[bos_id]])
+            dec_input = torch.LongTensor([[bos_id]]).repeat(B, 1)
             dec_input_len = torch.LongTensor([dec_input.size(-1)])
             for step in range(max_length):
                 # 매 루프마다 memory를 계산해야 함 (리팩터링 필요)
@@ -60,7 +61,7 @@ class Ptransformer(nn.Module):
                 output = self.generator(logits) ## rev.
                 
                 next_item = output.topk(1)[1].view(-1)[-1].item()
-                next_item = torch.tensor([[next_item]])
+                next_item = torch.tensor([[next_item]]).repeat(B, 1)
 
                 dec_input = torch.cat([dec_input, next_item], dim=-1)
                 # print("({}) dec_input: {}".format(di, dec_input))
