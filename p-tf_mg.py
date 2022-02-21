@@ -7,13 +7,13 @@ import os
 import numpy as np
 
 from torch.utils.data import Dataset, DataLoader
-from models.Ptransformer import Ptransformer
+from Ptransformer import Ptransformer
 from nltk.translate.bleu_score import sentence_bleu, corpus_bleu, SmoothingFunction
 import logging
 from transformers import get_scheduler
 from accelerate import Accelerator, DistributedDataParallelKwargs
 
-from Ptransformer.py import *
+# from Ptransformer.py import *
 
 
 class WMT_Dataset(nn.Module):
