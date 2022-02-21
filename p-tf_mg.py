@@ -152,9 +152,9 @@ def evaluate(model, criterion, dataloader, pad_id, tgt_tokenizer, device):
             predictions, references = [], []
             
             chencherry = SmoothingFunction()
-            for sample, label in zip(src, tgt[:, 1:-1]):
+            for sample, label, leng in zip(src, tgt[:, 1:-1], lenghts):
                 # (Tdec)
-                token = model.search(sample, None, max_length=130)
+                token = model.search(sample, leng, max_length=130)
                 prediction = tgt_tokenizer.decode_ids(token).split()
                 reference = tgt_tokenizer.decode_ids(label.tolist()).split()
                 # print('pred : ', prediction, '\n', 'ref : ', reference)
