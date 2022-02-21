@@ -150,20 +150,25 @@ def evaluate(model, criterion, dataloader, pad_id, tgt_tokenizer, device):
             ################################################################
             ### BLEU Score 계산 Inference ###
             predictions, references = [], []
-            
             chencherry = SmoothingFunction()
-            for sample, label, leng in zip(src, tgt[:, 1:-1], lenghts):
-                # (Tdec)
-                token = model.search(sample, leng, max_length=130)
-                prediction = tgt_tokenizer.decode_ids(token).split()
+            y_hat = outputs.max(-1)[1]
+            for sample, label in zip(y_hat, tgt_input):
+                # token = model.search(sample, max_length=120)
+                prediction = tgt_tokenizer.decode_ids([sample.tolist()]).split()
                 reference = tgt_tokenizer.decode_ids(label.tolist()).split()
-                # print('pred : ', prediction, '\n', 'ref : ', reference)
                 predictions.append(prediction)
                 references.append(reference)
-                # print('bleu : ', sentence_bleu([reference], prediction))
-            BLEU = corpus_bleu([references], predictions, smoothing_function=chencherry.method4)
+            # for sample, label, leng in zip(src, tgt[:, 1:-1], lengths.reshape(-1, 1)):
+            #     # (Tdec)
+            #     token = model.search(sample, leng, max_length=130)
+            #     prediction = tgt_tokenizer.decode_ids(token).split()
+            #     reference = tgt_tokenizer.decode_ids(label.tolist()).split()
+            #     # print('pred : ', prediction, '\n', 'ref : ', reference)
+            #     predictions.append(prediction)
+            #     references.append(reference)
+            #     # print('bleu : ', sentence_bleu([reference], prediction))
+            BLEU = corpus_bleu(references, predictions, smoothing_function=chencherry.method4)
             # print(BLEU)
-            epoch_BLEU.append(BLEU)
     print('validation completed...')
     BLEU_score = np.mean(epoch_BLEU)
     return losses / total_num, BLEU_score
