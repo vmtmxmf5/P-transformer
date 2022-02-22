@@ -28,10 +28,14 @@ class subclass(nn.Module):
                                 dropout,
                                 attention_dropout,
                                 self_attn_type=self_attn_type)
+        self.layer_norm = nn.LayerNorm(d_model, eps=1e-6)
+        
     def forward(self, src_out, src_mask, tgt_out, tgt_pad_mask, step=None):
-        # TODO LayerNorm??
+        # TODO LayerNorm?? Memory 여러개가 각기 다르게 변한다면, 업데이트마다 기존 Transformer보다 변동성이 크다
+        # 그러므로 반드시! LayerNorm을 해줘야 학습이 용이하다
         # Encoder
         src_out = self.enc(src_out, src_mask)
+        src_out = self.layer_norm(src_out)
         # Decoder
         tgt_out, attn = self.dec(tgt_out,
                                 src_out,
