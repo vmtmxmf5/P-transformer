@@ -42,7 +42,7 @@ class subclass(nn.Module):
                                 src_mask, # (B, 1, src_len)
                                 tgt_pad_mask,
                                 step=step)
-        return tgt_out
+        return src_out, tgt_out
 
 class PEDec(nn.Module):
     def __init__(self,
@@ -127,7 +127,7 @@ class PEDec(nn.Module):
                 src_out = pre_layer(src_out, src_mask)
 
         for layer in self.transformer:
-            tgt_out = layer(src_out, src_mask, tgt_out, tgt_pad_mask, step)
+            src_out, tgt_out = layer(src_out, src_mask, tgt_out, tgt_pad_mask, step)
             
         if self.post_tf:
             for post_layer in self.post_transformer:
