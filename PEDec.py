@@ -106,7 +106,7 @@ class PEDec(nn.Module):
         self.layer_norm = nn.LayerNorm(d_model, eps=1e-6)
     
     def forward(self, src, tgt, lengths=None, step=None):
-        src_emb = self.enc_embeddings(src, step=0) # (B, src_len, d_model)
+        src_emb = self.enc_embeddings(src) # (B, src_len, d_model)
         # MHA에서 (B, 1, 1, T_src)로 바꿀 예정
         src_mask = ~sequence_mask(lengths).unsqueeze(1) # (B, 1, src_len)
         tgt_emb = self.dec_embeddings(tgt, step=step)
