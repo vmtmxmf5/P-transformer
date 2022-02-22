@@ -120,7 +120,7 @@ class PEDec(nn.Module):
 
         if self.pre_tf:
             for pre_layer in self.pre_transformer:
-                src_out = pre_layer(src_out)
+                src_out = pre_layer(src_out, src_mask)
 
         for layer in self.transformer:
             tgt_out = layer(src_out, src_mask, tgt_out, tgt_pad_mask, step)
