@@ -34,10 +34,7 @@ class Ptransformer(nn.Module):
                         attention_dropout,
                         self.src_embeddings,
                         self.tgt_embeddings)
-        self.generator = nn.Sequential(nn.LayerNorm(d_model),
-                                    nn.Linear(d_model, tgt_vocab_size),
-                                    nn.LogSoftmax(dim=-1))
-            
+        self.generator = nn.LayerNorm(d_model)
         
     def forward(self, src, tgt, lengths, step=None):
         dec_in = tgt[:, :-1]  # (B, tgt_len - 1)
