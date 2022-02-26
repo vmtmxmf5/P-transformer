@@ -185,7 +185,7 @@ if __name__=='__main__':
     model = Ptransformer(SRC_VOCAB_SIZE, TGT_VOCAB_SIZE, NUM_ENCODER_LAYERS, NUM_DECODER_LAYERS, EMB_SIZE, NHEAD, FF_DIM, 0.1, 0.1, src_tokenizer.pad_id())
     criterion = nn.CrossEntropyLoss(ignore_index=src_tokenizer.pad_id())
     
-    load('./checkpoint/model_009.pt', model)
+    load('./checkpoint/model_029.pt', model)
         
     # evaluate function
     valid_loss, valid_BLEU = evaluate(model, criterion, valid_dataloader, src_tokenizer.pad_id(), tgt_tokenizer, device)
