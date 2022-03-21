@@ -1,2 +1,2 @@
 # P-transformer
-idea from iipl
+비공예정
